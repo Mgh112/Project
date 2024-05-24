@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login and Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+
+      
+      background-image: url('cool-background.png');
+      background-repeat: no-repeat;
+      background-size: cover;
+        
+    }
+
+    .container {
+      /*  max-width: 400px; */
+      width: 13cm;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .form-group button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+
+<body>
+  <div class="container">
+
+
+    <h2>Login</h2>
+    <div id="loginForm"> <!-- start loginform --> 
+
+      <h3>Login</h3>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" required>
+      </div> <!--End div of email (login)  -->
+
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" required>
+      </div> <!--End div of password (login)  -->
+
+      <div class="form-group">
+        <button id="loginButton">Log In</button>
+      </div> <!--End div of click (login)  -->
+
+    </div> <!-- End of loginForm -->
+
+
+    <div>
+      <p>Not a member yet? <a href="#" id="switchLink"> Register here </a></p>
+    </div>
+  </div> <!-- End of div container -->
+
+  <script>
+    
+document.addEventListener("DOMContentLoaded", function() {
+  var switchLink = document.getElementById("switchLink");
+  var loginButton = document.getElementById("loginButton");
+
+  switchLink.addEventListener("click", function(event) {
+    event.preventDefault();
+   window.location = "./Register.html"
+
+  });
+
+  loginButton.addEventListener("click", function(event) {
+    event.preventDefault();
+    var email = document.getElementById("email").value;
+    var password = document.getElementById("password").value;
+
+    if (email && password) {
+	
+      
+    const dataa = {
+        "email": email,
+        "password": password
+          };
+   var newdata;
+		  
+fetch('http://localhost:8800/api/auth/login/', {
+method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(dataa)
+})
+.then(response =>response.json())
+.then(data =>{console.log(data.details);  
+if(data.details)
+{
+alert("Logged in successfully!");
+ localStorage.setItem('fetchedData', JSON.stringify(data.details));
+ window.location = "./Home.html"
+}
+else
+alert("incorrect password or email please try again");
+
+})
+.catch(error => { console.error('Error', error);})
+	  
+      
+    } else {
+      alert("Please fill in all required fields.");
+    }
+  });
+
+
+});
+
+
+  </script>
+</body>
+</html>

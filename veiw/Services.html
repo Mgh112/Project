@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+            body {
+            background-image: url('cool-background.png');
+            background-repeat: no-repeat;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            margin: 0;
+            min-height: 100vh; /* Added to ensure the background fills the entire page */
+        }
+
+        .navig {
+            background-color: #2574ac;
+            padding: 3px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list1 {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .item1 {
+            margin-right: 10px;
+            position: relative;
+        }
+
+        .item1 a {
+            text-decoration: none;
+            color: #333;
+            padding: 5px;
+            position: relative;
+            z-index: 1;
+            font-family: 'Arial', sans-serif;
+            font-size: 18px;
+            transition: color 0.3s ease-in-out;
+        }
+
+        .item1 a:before {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: #090606;
+            transform: scaleX(0);
+            transition: transform 0.3s ease-in-out;
+            z-index: -1;
+        }
+
+        .item1 a:hover {
+            color: #2b44bfd1;
+        }
+
+        .item1 a:hover:before {
+            transform: scaleX(1);
+        }
+
+        .logo {
+            height: 50px;
+            width: 100px;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+        }
+
+        .Packages {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+	margin-top: 50px;
+}
+
+.Package1, .Package2 {
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 20px;
+    border-radius: 10px;
+    width: 400px;
+    height: 300px; /* Set a fixed height for both divs */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.Package1 h3, .Package2 h3 {
+    margin-top: 0;
+}
+
+.Package1 p, .Package2 p {
+    margin-bottom: 20px;
+}
+
+.Package1 a, .Package2 a {
+    background-color: #2574ac;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease-in-out;
+}
+
+.Package1 a:hover, .Package2 a:hover {
+    background-color: #1e5983;
+}
+
+
+.datetime-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+
+.datetime-container label {
+    margin-right: 10px;
+}
+
+.datetime-container input {
+    margin-right: 10px;
+}
+
+
+    </style>
+</head>
+
+<body>
+    <div class="navig">
+        <ul class="list1">
+            <li class="item1"><a href="Home.html">Home Page</a></li>
+            <li class="item1"><a href="Services.html">Services</a></li>
+            <li class="item1"><a href="Booking.html">Booking</a></li>
+            
+        </ul>
+        <img src="logo.png" class="logo">
+    </div>
+
+    <div class="Packages">
+	
+        <div class="Package1">
+            <h3 id="name"></h3>
+            <p  id="desc"></p>
+            <p id="price"></p>
+            <a  id="Booking1">Booking</a>
+        </div>
+    
+        <div class="Package2">
+            <h3 id="name1"></h3>
+            <p id="desc1"></p>
+            <p id="price1" ></p>
+            <a  id="Booking2">Booking</a>
+        </div>
+		
+    </div>
+
+
+    <div class="datetime-container">
+        <label for="datetime-input">Choose a date and time:</label>
+        <input type="datetime-local" id="datetime-input" name="datetime-input">
+   <!--  <button id="submit-btn">Submit</button> -->
+    </div>
+
+<script> 
+
+document.addEventListener("DOMContentLoaded", function() {
+
+
+const value = localStorage.getItem('fetchedData');
+
+if(value)
+{
+console.log(value);
+
+var newdata;
+fetch('http://localhost:8800/api/services')
+.then(response =>response.json())
+.then(data => {
+newdata=data;console.log(newdata);
+localStorage.setItem('fetchedData1', JSON.stringify(newdata));
+})
+.catch(error => {
+  console.error('Error', error);
+});
+
+
+
+ const value1 = localStorage.getItem('fetchedData1');
+ const x = JSON.parse(value1);
+ console.log(x);
+  if (x)
+  {
+console.log(value1);
+document.getElementById('name').innerHTML=x[0].name;
+document.getElementById('desc').innerHTML=x[0].desc;
+document.getElementById('price').innerHTML=x[0].Price;
+
+document.getElementById('name1').innerHTML=x[1].name;
+document.getElementById('desc1').innerHTML=x[1].desc;
+document.getElementById('price1').innerHTML=x[1].Price;
+}
+    
+
+
+const datetimeInput = document.getElementById('datetime-input');
+const submitBtn = document.getElementById('submit-btn');
+
+//submitBtn.addEventListener('click', function() {
+  //  const selectedDateTime = datetimeInput.value;
+   // console.log('Selected date and time:', selectedDateTime);
+    
+//});
+
+var Booking1 = document.getElementById("Booking1");
+Booking1.addEventListener("click", function(event) {
+    event.preventDefault();
+	
+	
+	
+const dateTimeInput = document.getElementById('datetime-input');
+const dateTimeValue = dateTimeInput.value;
+if (dateTimeValue)
+{	
+
+
+  
+	
+  var valu = localStorage.getItem('fetchedData');
+  const parsedObject = JSON.parse(valu);
+   var userid= parsedObject._id;
+	
+  var valu1 = localStorage.getItem('fetchedData1');
+  const parsedObject1 = JSON.parse(valu1);
+  var serviceid=parsedObject1[0]._id;
+    console.log(userid);
+	console.log(serviceid);
+	
+  const time1={
+  "time":dateTimeValue,
+  "serviceid":serviceid
+  }
+ window.localStorage.setItem("time1", JSON.stringify(time1));
+
+	
+	
+	
+	
+const datas = { "serviceid": serviceid, "userid": userid };
+const url="http://localhost:8800/api/users/rr/"+userid;
+fetch(url,{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(datas)
+    })
+.then(response =>response.json())
+.then(data =>{console.log(data)})
+.catch(error => {
+  console.error('Error', error);
+  
+})
+	
+}
+else
+{
+alert("please Enter correct time");
+}	
+	
+	
+	
+	
+	
+	})
+
+	
+	
+var Booking1 = document.getElementById("Booking2");
+Booking1.addEventListener("click", function(event) {
+    event.preventDefault();
+	
+		
+const dateTimeInput = document.getElementById('datetime-input');
+const dateTimeValue = dateTimeInput.value;
+if (dateTimeValue)
+{	
+	
+	
+	var valu2 = localStorage.getItem('fetchedData');
+  const parsedObject2 = JSON.parse(valu2);
+   var userid2= parsedObject2._id;
+	
+  var valu3 = localStorage.getItem('fetchedData1');
+  const parsedObject3 = JSON.parse(valu3);
+  var serviceid3=parsedObject3[1]._id;
+    console.log(userid2);
+	console.log(serviceid3);
+	
+  const time2={
+  "time":dateTimeValue,
+  "serviceid":serviceid3
+  }
+ window.localStorage.setItem("time2", JSON.stringify(time2));
+	
+	
+const data2s = { "serviceid": serviceid3, "userid": userid2 };
+const url="http://localhost:8800/api/users/rr/"+userid2;
+fetch(url,{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data2s)
+    })
+.then(response =>response.json())
+.then(data =>{console.log(data)})
+.catch(error => {
+  console.error('Error', error);
+  
+})
+
+	}
+else
+{
+alert("please Enter correct time");
+}
+	
+	
+	
+	
+	})
+	
+}
+else
+{
+window.location = "./RegLog.html"
+}	
+})	
+
+ 
+
+</script>
+
+<script>
+
+	
+</script>
+
+</body>
+</html>
